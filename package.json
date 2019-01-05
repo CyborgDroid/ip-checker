@@ -1,0 +1,15 @@
+{
+  "name": "ip-checker",
+  "version": "1.0.0",
+  "description": "Checks if the computer's public IP has changed and sends an email when a change is detected",
+  "main": "public_ip_check.js",
+  "scripts": {
+    "test": "node public_ip_check.js"
+  },
+  "author": "cyborgdroid",
+  "license": "ISC",
+  "dependencies": {
+    "nodemailer": "^5.0.0",
+    "public-ip": "^3.0.0"
+  }
+}
