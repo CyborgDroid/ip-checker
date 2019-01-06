@@ -20,7 +20,7 @@ Optional auto-run when computer boots up (UBUNTU instructions):
 sudo npm install pm2@latest -g
 pm2 start public_ip_check.js
 pm2 save
-pm2 startup upstart
+pm2 startup
 ```
 
 copy and paste what pm2 tells you to
