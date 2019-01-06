@@ -4,22 +4,6 @@ const fs = require('fs');
 
 let transporter, mailOptions;
 
-let myIP = (() => {
-    if (fs.existsSync('myIP.json')) {
-        return JSON.parse(fs.readFileSync('myIP.json', 'utf8')).IP;
-    } else {
-        getIP().then((latestIP) => { 
-            fs.writeFileSync('myIP.json', JSON.stringify({"IP":myIP}), (err) => {
-                if (err) throw err;
-                //console.log('******* GENOMES SAVED TO: ', file_name, '*******');
-            });
-            return latestIP;
-        });
-    }
-})();
-
-console.log(myIP);
-
 const getIP = async () => {
     try {
         let latestIP = await publicIp.v4();
@@ -31,15 +15,27 @@ const getIP = async () => {
     }
 };
 
+let myIP = (() => {
+    if (fs.existsSync('myIP.json')) {
+        return JSON.parse(fs.readFileSync('myIP.json', 'utf8')).IP;
+    } else {
+        getIP().then((latestIP) => { 
+            fs.writeFileSync('myIP.json', JSON.stringify({"IP":myIP}), (err) => {
+                if (err) throw err;
+            });
+            return latestIP;
+        });
+    }
+})();
+
 const IPcheckAndSendOnUpdate = () => {
     getIP().then((latestIP) => {
+        // if IP changed, save it to file and send an email with new ip
         if(myIP !== latestIP){
             console.log('new ip:', latestIP);
-            console.log('new ip type:', typeof latestIP);
             myIP = latestIP;
             fs.writeFileSync('myIP.json', JSON.stringify({"IP":myIP}), (err) => {
                 if (err) throw err;
-                //console.log('******* GENOMES SAVED TO: ', file_name, '*******');
               });
             mailOptions.text = myIP;
             transporter.sendMail(mailOptions, function(error, info){
@@ -49,9 +45,7 @@ const IPcheckAndSendOnUpdate = () => {
                     console.log('Email sent: ' + info.response);
                 }
             });
-        } else {
-            console.log('ip same');
-        }
+        } 
     });
 };
 
@@ -74,4 +68,4 @@ const IPcheckAndSendOnUpdate = () => {
     };
 })(); 
 
-setInterval(IPcheckAndSendOnUpdate, 5*1000);
+setInterval(IPcheckAndSendOnUpdate, 10*1000);
