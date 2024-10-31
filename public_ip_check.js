@@ -61,7 +61,7 @@ const IPcheckAndSendOnUpdate = () => {
     });
 
     mailOptions = {
-        from: creds.username + '@gmail.com',
+        from: creds.username + '@yahoo.com',
         to: creds.email_recepient,
         subject: 'New IP detected',
         text: 'That was easy!'
